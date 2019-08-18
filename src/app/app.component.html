@@ -1,0 +1,36 @@
+Server Status: {{ status }}
+<div *ngIf="status === 'OK'">
+  <div style="text-align:center" xmlns="http://www.w3.org/1999/html">
+    <h1>
+      Welcome to {{ title }}!
+    </h1>
+  </div>
+  <h2 *ngIf="question != undefined">{{question.q}}</h2>
+
+  <div *ngFor="let item of answers | keyvalue">
+    <label for="answer_{{item.value}}">
+      <input id="answer_{{item.value}}"
+             [value]='item.value' type="radio" name="enums_{{item.value}}"
+             (click)="selectAnswer(item.value)"
+             [(ngModel)]="radioSelected">
+      {{item.key}}
+    </label>
+  </div>
+
+  <div class="pagination">
+    <a href="#" (click)="getPrevQuestion()" *ngIf="questionID != 1">❮ Prev</a>
+    <a href="#" (click)="getNextQuestion()" *ngIf="questionID != lastQuestionIndex">Next ❯</a>
+  </div>
+
+  <div style="text-align: right">Total Point:<span>{{totalPoint}}</span></div>
+
+  <!-- show button on the last question -->
+  <button *ngIf="questionID === lastQuestionIndex" (click)="showResult=!showResult">Show Results</button>
+
+  <!-- show results according to the showResult variable's status -->
+  <div *ngIf="questionID === lastQuestionIndex && showResult">
+    <span *ngIf="totalPoint<=6">0-6 points: Unfortunately, we don’t match!</span>
+    <span *ngIf="totalPoint>=7 && totalPoint<=10">7-10 points: That looks good!</span>
+    <span *ngIf="totalPoint>10">10 points or more: Excellent!</span>
+  </div>
+</div>
